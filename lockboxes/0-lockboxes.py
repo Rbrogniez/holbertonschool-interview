@@ -19,5 +19,4 @@ def canUnlockAll(boxes):
                 unlocked[key] = True
                 stack.append(key)
 
-    return all(unlocked)
-
+    return all(unlocked)    
