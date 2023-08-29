@@ -2,6 +2,7 @@
 """
     Determine if all locked boxes can be opened using provided keys.
 """
+
 def canUnlockAll(boxes):
     """
     Determine if all locked boxes can be opened using provided keys.
@@ -19,4 +20,4 @@ def canUnlockAll(boxes):
                 unlocked[key] = True
                 stack.append(key)
 
-    return all(unlocked)    
+    return all(unlocked)
