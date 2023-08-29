@@ -1,15 +1,12 @@
 #!/usr/bin/python3
-
+"""
+    Determine if all locked boxes can be opened using provided keys.
+"""
 def canUnlockAll(boxes):
     """
     Determine if all locked boxes can be opened using provided keys.
-
-    Args:
-        boxes (list of list): A list of lists where each sub-list represents the keys in a box.
-
-    Returns:
-        bool: True if all boxes can be opened, False otherwise.
     """
+
     n = len(boxes)  # Total number of boxes
     unlocked = [False] * n  # List to track whether each box is unlocked
     unlocked[0] = True  # The first box is unlocked by default
