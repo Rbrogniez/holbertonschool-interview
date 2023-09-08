@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+"""
+Base case: If n is less than or equal to 1, no operations are needed.
+"""
 
-"""Base case: If n is less than or equal to 1, no operations are needed."""
 
 def minOperations(n):
     if n <= 1:
