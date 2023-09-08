@@ -4,7 +4,7 @@
 
 def minOperations(n):
     if n <= 1:
-        return n
+        return 0  # Return 0 for values less than or equal to 1
 
     operations = 0
     divisor = 2
