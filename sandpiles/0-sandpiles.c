@@ -37,8 +37,9 @@ void topple(int grid[SIZE][SIZE], int i, int j) {
 
 // Function to compute the sum of two sandpiles
 void sandpiles_sum(int grid1[SIZE][SIZE], int grid2[SIZE][SIZE]) {
-    // Add the two sandpiles together
     int i, j;
+
+    // Add the two sandpiles together
     for (i = 0; i < SIZE; i++) {
         for (j = 0; j < SIZE; j++) {
             grid1[i][j] += grid2[i][j];
