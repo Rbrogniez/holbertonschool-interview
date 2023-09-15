@@ -4,8 +4,9 @@
 
 // Function to print a sandpile
 void printSandpile(int grid[SIZE][SIZE]) {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
+    int i, j;
+    for (i = 0; i < SIZE; i++) {
+        for (j = 0; j < SIZE; j++) {
             printf("%d ", grid[i][j]);
         }
         printf("\n");
@@ -14,8 +15,9 @@ void printSandpile(int grid[SIZE][SIZE]) {
 
 // Function to check if a sandpile is stable
 int isStable(int grid[SIZE][SIZE]) {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
+    int i, j;
+    for (i = 0; i < SIZE; i++) {
+        for (j = 0; j < SIZE; j++) {
             if (grid[i][j] > 3) {
                 return 0; // Unstable
             }
@@ -36,8 +38,9 @@ void topple(int grid[SIZE][SIZE], int i, int j) {
 // Function to compute the sum of two sandpiles
 void sandpiles_sum(int grid1[SIZE][SIZE], int grid2[SIZE][SIZE]) {
     // Add the two sandpiles together
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
+    int i, j;
+    for (i = 0; i < SIZE; i++) {
+        for (j = 0; j < SIZE; j++) {
             grid1[i][j] += grid2[i][j];
         }
     }
@@ -49,18 +52,23 @@ void sandpiles_sum(int grid1[SIZE][SIZE], int grid2[SIZE][SIZE]) {
         int temp[SIZE][SIZE];
 
         // Copy the current state of grid1 to temp
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (i = 0; i < SIZE; i++) {
+            for (j = 0; j < SIZE; j++) {
                 temp[i][j] = grid1[i][j];
             }
         }
 
         // Perform toppling on temp
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (i = 0; i < SIZE; i++) {
+            for (j = 0; j < SIZE; j++) {
                 if (temp[i][j] > 3) {
                     topple(grid1, i, j);
                 }
             }
         }
     }
+
+    // Print the final stable sandpile
+    printf("Final Stable Sandpile:\n");
+    printSandpile(grid1);
+}
