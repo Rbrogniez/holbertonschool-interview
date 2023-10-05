@@ -1,41 +1,50 @@
 #!/usr/bin/python3
-"""Module for parse log"""
-
+"""
+Module that reads stdin line by line and computes metrics
+"""
 import sys
-import fileinput
+import signal
 
-status_codes = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0, "404": 0,
-                "405": 0, "500": 0}
-file_size = 0
-nbline = 1
 
-try:
-    for line in fileinput.input():
-        check_format = line.split()
-        check_nb = len(check_format)
-        if check_nb == 7:
-            file_size += 1000
-            status_code = line.split('"')[2].split()[0]
-            for key, value in status_codes.items():
-                if status_code == key:
-                    status_codes[key] = value + 1
-        elif check_nb == 9:
-            status_code = line.split('"')[2].split()[0]
-            file_size += int(line.split('"')[2].split()[1])
-            for key, value in status_codes.items():
-                if status_code == key:
-                    status_codes[key] = value + 1
-            if nbline % 10 == 0 and nbline != 0:
-                print("File size: {}".format(file_size))
-                for key in sorted(status_codes.keys()):
-                    if status_codes[key] > 0:
-                        print("{}: {}".format(key, status_codes[key]))
-            nbline = nbline + 1
-        else:
-            pass
-except KeyboardInterrupt:
-    pass
-print("File size: {}".format(file_size))
-for key in sorted(status_codes.keys()):
-    if status_codes[key] > 0:
-        print("{}: {}".format(key, status_codes[key]))
+status_code = {
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0
+}
+count = 0
+size = 0
+
+
+def signal_handler(sig, frame):
+    """Handle when CTRL + C is pressed"""
+    print_stats()
+
+
+def print_stats():
+    """Print the stats obtained from the file"""
+    print("File size: {}".format(size))
+    for k, v in sorted(status_code.items()):
+        if (v != 0):
+            print("{:s}: {:d}".format(k, v))
+
+
+signal.signal(signal.SIGINT, signal_handler)
+for line in sys.stdin:
+    line_split = line.split()
+    len_line = len(line_split)
+    if (len_line == 1):
+        continue
+    count += 1
+    size += int(line_split[len_line - 1])
+    if (line_split[len_line - 2] not in status_code.keys()):
+        continue
+    status_code[line_split[len_line - 2]] += 1
+
+    if (count % 10 == 0):
+        print_stats()
+print_stats()
