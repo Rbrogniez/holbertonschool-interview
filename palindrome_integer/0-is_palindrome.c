@@ -8,9 +8,6 @@ int is_palindrome(unsigned long n)
         nb = nb / 10;
     }
 
-    if (n == inverse)
-        return 1;
-    else
-        return 0;
+    return (n == inverse);
 
 }
