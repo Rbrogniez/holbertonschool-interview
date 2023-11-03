@@ -13,11 +13,11 @@
  */
 int slide_line(int *line, size_t size, int direction) {
     if (direction != SLIDE_LEFT && direction != SLIDE_RIGHT) {
-        return 0;  // Invalid direction
+        return 0;  /* Invalid direction */
     }
 
     if (direction == SLIDE_LEFT) {
-        // Slide and merge to the left
+        /* Slide and merge to the left */
         size_t i, j;
         for (i = 0; i < size; i++) {
             if (line[i] == 0) {
@@ -40,7 +40,7 @@ int slide_line(int *line, size_t size, int direction) {
             }
         }
     } else if (direction == SLIDE_RIGHT) {
-        // Slide and merge to the right
+        /* Slide and merge to the right */
         size_t i, j;
         for (i = size - 1; i < size; i--) {
             if (line[i] == 0) {
@@ -63,5 +63,5 @@ int slide_line(int *line, size_t size, int direction) {
             }
         }
     }
-    return 1;  // Success
+    return 1;  /* Success */
 }
