@@ -1,3 +1,5 @@
+ #!/usr/bin/python3
+
 def validUTF8(data):
     # Helper function to check if a byte is a valid UTF-8 start byte
     def is_start_byte(byte):
