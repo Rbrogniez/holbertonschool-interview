@@ -1,6 +1,29 @@
 #!/usr/bin/python3
 
 def validUTF8(data):
+    """
+    Determine if a given data set represents a valid UTF-8 encoding.
+
+    :param data: A list of integers where each integer represents 1 byte of data.
+    :return: True if data is a valid UTF-8 encoding, else return False.
+
+    A character in UTF-8 can be 1 to 4 bytes long.
+    The data set can contain multiple characters.
+    The function checks if the input data conforms to UTF-8 encoding rules.
+
+    Example:
+    >>> data = [65]
+    >>> validUTF8(data)
+    True
+
+    >>> data = [80, 121, 116, 104, 111, 110, 32, 105, 115, 32, 99, 111, 111, 108, 33]
+    >>> validUTF8(data)
+    True
+
+    >>> data = [229, 65, 127, 256]
+    >>> validUTF8(data)
+    False
+    """
     # Helper function to check if a given byte is a valid UTF-8 continuation byte
     def is_continuation(byte):
         return (byte & 0b11000000) == 0b10000000
