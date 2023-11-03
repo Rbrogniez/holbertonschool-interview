@@ -1,45 +1,38 @@
 #!/usr/bin/python3
 
 def validUTF8(data):
-    # Helper function to check if a byte is a valid UTF-8 start byte
-    def is_start_byte(byte):
-        return (byte & 0b10000000) == 0b0
-
-    # Helper function to check if a byte is a valid UTF-8 continuation byte
-    def is_continuation_byte(byte):
+    # Helper function to check if a given byte is a valid UTF-8 continuation byte
+    def is_continuation(byte):
         return (byte & 0b11000000) == 0b10000000
 
-    # Initialize a count to keep track of expected continuation bytes
-    count = 0
+    # Initialize the number of expected continuation bytes to 0
+    expected_continuations = 0
 
     for byte in data:
-        if count == 0:
-            if is_start_byte(byte):
-                # Determine the number of continuation bytes based on the start byte
-                if (byte & 0b11100000) == 0b11000000:
-                    count = 1
-                elif (byte & 0b11110000) == 0b11100000:
-                    count = 2
-                elif (byte & 0b11111000) == 0b11110000:
-                    count = 3
-                else:
-                    # Invalid start byte
-                    return False
-            else:
-                # Invalid start byte
+        # Keep only the 8 least significant bits of the byte
+        byte = byte & 0b11111111
+
+        if expected_continuations > 0:
+            # If we are expecting continuation bytes, the current byte must be a continuation byte
+            if not is_continuation(byte):
                 return False
+            expected_continuations -= 1
         else:
-            if is_continuation_byte(byte):
-                count -= 1
+            if (byte & 0b10000000) == 0:
+                # If the byte starts with '0', it's a single-byte character
+                continue
+            elif (byte & 0b11100000) == 0b11000000:
+                # If the byte starts with '110', it's a two-byte character
+                expected_continuations = 1
+            elif (byte & 0b11110000) == 0b11100000:
+                # If the byte starts with '1110', it's a three-byte character
+                expected_continuations = 2
+            elif (byte & 0b11111000) == 0b11110000:
+                # If the byte starts with '11110', it's a four-byte character
+                expected_continuations = 3
             else:
-                # Invalid continuation byte
+                # Invalid starting byte for UTF-8 character
                 return False
 
-    # Check if all expected continuation bytes are present
-    return count == 0
-
-# Test cases
-data1 = [197, 130, 1]  # Represents the valid UTF-8 character 'Ç' (U+00C7)
-data2 = [235, 140, 4]  # Invalid UTF-8 data
-print(validUTF8(data1))  # Output: True
-print(validUTF8(data2))  # Output: False
+    # If there are still expected continuations, it means the input is incomplete
+    return expected_continuations == 0
