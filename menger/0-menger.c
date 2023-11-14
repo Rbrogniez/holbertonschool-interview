@@ -1,49 +1,41 @@
-#include <stdio.h>
-#include <math.h>
-
-void drawSquare(int size);
+#include "menger.h"
 
 /**
- * menger - Draws a 2D Menger Sponge
- * @level: Level of the Menger Sponge to draw
+ * menger - Entry point
+ *
+ * @level: level of the Menger Sponge to draw
  */
 void menger(int level)
 {
-    if (level < 0)
-        return;
+	int size = pow(3, level), i, j;
 
-    int size = pow(3, level);
+	if (level < 0)
+		return;
 
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            if (i % 3 == 1 && j % 3 == 1)
-            {
-                // Center of the Menger Sponge, leave empty
-                printf(" ");
-            }
-            else
-            {
-                // Draw the Menger Sponge
-                drawSquare(level);
-            }
-        }
-        printf("\n");
-    }
+	for (i = 0; i < size; i++)
+	{
+		for (j = 0; j < size; j++)
+			IsEmpty(i, j) ? printf(" ") : printf("#");
+		printf("\n");
+	}
 }
 
 /**
- * drawSquare - Draws a square for the Menger Sponge
- * @size: Size of the square
+ * IsEmpty - check if a place is part of the menger sponge
+ *
+ * @x: Coordinate
+ * @y: Coordinate
+ *
+ * Return: 1 if empty
  */
-void drawSquare(int size)
+int IsEmpty(int x, int y)
 {
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            printf("#");
-        }
-    }
+	while (x > 0 || y > 0)
+	{
+		if (x % 3 == 1 && y % 3 == 1)
+			return (1);
+		x /= 3;
+		y /= 3;
+	}
+	return (0);
 }
