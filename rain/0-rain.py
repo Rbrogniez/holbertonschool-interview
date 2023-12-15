@@ -12,15 +12,9 @@ def rain(walls):
 
     Returns:
         int: Total amount of rainwater retained.
-
-    Raises:
-        ValueError: If the input list has less than 3 elements.
     """
-    if not walls:
-        return 0
-
     if len(walls) < 3:
-        raise ValueError("Input list must contain at least 3 elements.")
+        return 0
 
     n = len(walls)
     left_max = [0] * n
