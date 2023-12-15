@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 def rain(walls):
     if not walls:
         return 0
 
     n = len(walls)
     left_max, right_max = [0] * n, [0] * n
-    left_max[0] = walls[0]
+    left_max[0] = walls[0]#!/usr/bin/python3
     right_max[n - 1] = walls[n - 1]
 
     # Calculate the maximum height from the left for each position
