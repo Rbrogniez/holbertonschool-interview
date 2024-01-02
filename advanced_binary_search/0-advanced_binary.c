@@ -46,7 +46,12 @@ int advanced_binary_recursive(int *array, size_t start, size_t end, int value)
     mid = (start + end) / 2;
 
     if (array[mid] == value)
-        return mid;
+    {
+        if (mid == start || array[mid - 1] != value)
+            return mid;
+        else
+            return advanced_binary_recursive(array, start, mid, value);
+    }
 
     if (array[mid] < value)
         return advanced_binary_recursive(array, mid + 1, end, value);
