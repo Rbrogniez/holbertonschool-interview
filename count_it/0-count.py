@@ -3,6 +3,24 @@
 import requests
 
 def count_words(subreddit, word_list, after=None, counts=None):
+    """
+    Compter les occurrences de mots-clés dans les titres des articles populaires d'un subreddit en utilisant l'API Reddit.
+
+    Paramètres :
+        - subreddit (str) : Le nom du subreddit à interroger.
+        - word_list (list) : Liste des mots-clés pour lesquels compter les occurrences.
+        - after (str, optionnel) : Paramètre pour la pagination, spécifie le point de départ pour récupérer les résultats.
+        - counts (dict, optionnel) : Dictionnaire pour stocker les comptes de chaque mot-clé.
+
+    Renvoie :
+        None : La fonction affiche le compte trié des mots-clés donnés.
+
+    Remarque : Cette fonction est conçue pour être utilisée de manière récursive.
+
+    Exemple :
+        count_words('python', ['java', 'python', 'javascript'])
+    """
+
     # Si counts est None, initialisez-le comme un dictionnaire vide
     if counts is None:
         counts = {}
@@ -45,10 +63,21 @@ def count_words(subreddit, word_list, after=None, counts=None):
     else:
         # Si une page suivante n'existe pas, imprimer les résultats
         print_results(counts)
-    
+
 
 
 def print_results(counts):
+
+    """
+    Afficher le compte trié des mots-clés donnés.
+
+    Paramètres :
+        - counts (dict) : Dictionnaire contenant les comptes de chaque mot-clé.
+
+    Renvoie :
+        None : La fonction affiche le compte trié des mots-clés donnés.
+    """
+
     sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
     for word, count in sorted_counts:
         print(f'{word}: {count}')
