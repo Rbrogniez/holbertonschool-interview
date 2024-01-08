@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """
 Fonction récursive qui interroge l'API Reddit, analyse le titre de tous les articles populaires,
 et affiche un décompte trié des mots-clés donnés (insensible à la casse, délimité par des espaces).
@@ -72,7 +71,6 @@ def count_words(subreddit, word_list, after=None, counts=None):
 
 
 def print_results(counts):
-
     """
     Afficher le compte trié des mots-clés donnés.
 
