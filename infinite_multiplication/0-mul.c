@@ -40,10 +40,46 @@ int is_digit(char *str)
  */
 void multiply(char *num1, char *num2)
 {
-    /* Your multiplication logic goes here */
+  int len1 = 0, len2 = 0;
+
+    while (num1[len1])
+        len1++;
+    while (num2[len2])
+        len2++;
+
+    int result_len = len1 + len2;
+    int *result = malloc(sizeof(int) * result_len);
+    if (result == NULL)
+        error_and_exit();
+
+    /* Initialize the result array to 0 */
+    for (int i = 0; i < result_len; i++)
+        result[i] = 0;
+
+    /* Multiply each digit and add to the result */
+    for (int i = len1 - 1; i >= 0; i--)
+    {
+        int carry = 0;
+        for (int j = len2 - 1; j >= 0; j--)
+        {
+            int mul = (num1[i] - '0') * (num2[j] - '0') + result[i + j + 1] + carry;
+            result[i + j + 1] = mul % 10;
+            carry = mul / 10;
+        }
+        result[i] += carry;
+    }
+
     /* Print the result using _putchar */
-    (void)num1;
-    (void)num2;
+    int start = 0;
+    while (start < result_len - 1 && result[start] == 0)
+        start++;
+
+    for (int i = start; i < result_len; i++)
+        _putchar(result[i] + '0');
+
+    _putchar('\n');
+
+    free(result);
 }
 
 int main(int argc, char *argv[])
