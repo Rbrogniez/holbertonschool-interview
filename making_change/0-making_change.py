@@ -16,9 +16,9 @@ def makeChange(coins, total):
             add_coins += coins[i]
             numb_coins += 1
 
-    if add_coins != total:
-        return -1
-    elif numb_coins == 0 or total < 0:
+    if numb_coins == 0 or total < 0:
         return 0
+    elif add_coins != total:
+        return -1
     else:
         return numb_coins
