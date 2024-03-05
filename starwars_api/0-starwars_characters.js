@@ -2,43 +2,41 @@
 
 const request = require('request');
 
-const movieId = process.argv[2];
-
-if (!movieId || isNaN(movieId)) {
-  console.error('Usage: ./0-starwars_characters.js <movieId>');
-  process.exit(1);
-}
-
-const apiUrl = `https://swapi.dev/api/films/${movieId}/`;
-
-request(apiUrl, (error, response, body) => {
-  if (error) {
-    console.error('Error:', error);
-    process.exit(1);
-  }
-
-  if (response.statusCode !== 200) {
-    console.error(`Failed to fetch data. Status code: ${response.statusCode}`);
-    process.exit(1);
-  }
-
-  const filmData = JSON.parse(body);
-  const characters = filmData.characters;
-
-  characters.forEach(characterUrl => {
-    request(characterUrl, (charError, charResponse, charBody) => {
-      if (charError) {
-        console.error('Error fetching character data:', charError);
-        process.exit(1);
+/**
+ * Returns the name of a Star Wars character given their URL
+ * @param {string} characterUrl - The URL of the character
+ * @returns {Promise<string>} - A promise that resolves to the character's name
+ */
+function getName (characterUrl) {
+  return new Promise((resolve, reject) => {
+    request.get(characterUrl, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(JSON.parse(body).name);
       }
-
-      if (charResponse.statusCode !== 200) {
-        console.error(`Failed to fetch character data. Status code: ${charResponse.statusCode}`);
-        process.exit(1);
-      }
-
-      const characterData = JSON.parse(charBody);
-      console.log(characterData.name);
     });
   });
-});
+}
+
+/**
+ * Displays the names of all characters in a Star Wars film
+ * @returns {Promise<void>} - A promise that resolves when all names have been displayed
+ */
+const displayData = async () => {
+  try {
+    const filmId = process.argv[2];
+    request.get(`https://swapi-api.hbtn.io/api/films/${filmId}`, async (error, response, body) => {
+      if (error) {
+        console.log('Found error');
+      } else {
+        const names = await Promise.all(JSON.parse(body).characters.map(character => getName(character)));
+        names.forEach(name => console.log(name));
+      }
+    });
+  } catch (err) {
+    console.log('Found error');
+  }
+};
+
+displayData();
