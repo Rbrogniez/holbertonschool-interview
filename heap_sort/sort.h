@@ -1,11 +1,12 @@
-#ifndef LISTS_H
-#define LISTS_H
+#ifndef SORT_H
+#define SORT_H
 
 #include <stdlib.h>
 #include <stdio.h>
 
 void print_array(const int *array, size_t size);
-void siftdown(int array[], int nodeValue, int root, int last);
 void heap_sort(int *array, size_t size);
+void heapify_array(int *array, size_t size, size_t index, size_t originalSize);
+void swap_value(int *a, int *b);
 
-#endif /* LISTS_H */
+#endif /* SORT_H */
