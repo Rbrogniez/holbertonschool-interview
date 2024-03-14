@@ -16,8 +16,8 @@ int getMax(int *array, size_t size) {
 /* Helper function to perform counting sort */
 void countSort(int *array, size_t size, int exp) {
     int *output = malloc(size * sizeof(int));
-    int count[10] = {0}; /* Declaration moved up */
     size_t i;
+    int count[10] = {0}; /* Declaration moved up */
 
     if (output == NULL) {
         /* Handle allocation failure */
@@ -46,12 +46,14 @@ void countSort(int *array, size_t size, int exp) {
 
 /* Main Radix Sort function */
 void radix_sort(int *array, size_t size) {
+    int max;
+    int exp;
+
     if (size < 2) {
         return; /* Array already sorted */
     }
 
-    int max = getMax(array, size);
-    int exp;
+    max = getMax(array, size); /* Moved declaration to the beginning */
     for (exp = 1; max / exp > 0; exp *= 10) {
         countSort(array, size, exp);
         print_array(array, size);
