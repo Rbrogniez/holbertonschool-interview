@@ -16,19 +16,20 @@ int getMax(int *array, size_t size) {
 /* Helper function to perform counting sort */
 void countSort(int *array, size_t size, int exp) {
     int *output = malloc(size * sizeof(int));
+    int count[10] = {0}; /* Declaration moved up */
+    size_t i;
+
     if (output == NULL) {
         /* Handle allocation failure */
         return;
     }
-    int count[10] = {0};
-    size_t i;
 
     for (i = 0; i < size; i++) {
         count[(array[i] / exp) % 10]++;
     }
 
-    for (int j = 1; j < 10; j++) {
-        count[j] += count[j - 1];
+    for (i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
     }
 
     for (i = size; i > 0; i--) {
