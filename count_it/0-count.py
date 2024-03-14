@@ -1,86 +1,63 @@
 #!/usr/bin/python3
-"""
-Fonction récursive qui interroge l'API Reddit, analyse le titre de tous les articles populaires,
-et affiche un décompte trié des mots-clés donnés (insensible à la casse, délimité par des espaces).
-"""
-
+"""Module to count the occurrences of words in the titles of hot posts"""
 import requests
 
-def count_words(subreddit, word_list, after=None, counts=None):
+
+def count_words(subreddit, word_list, after='', count={}):
     """
-    Compter les occurrences de mots-clés dans les titres des articles populaires d'un subreddit en utilisant l'API Reddit.
+    Recursively counts the occurrences of a list of words in the titles of
+    the hot posts of a subreddit.
 
-    Paramètres :
-        - subreddit (str) : Le nom du subreddit à interroger.
-        - word_list (list) : Liste des mots-clés pour lesquels compter les occurrences.
-        - after (str, optionnel) : Paramètre pour la pagination, spécifie le point de départ pour récupérer les résultats.
-        - counts (dict, optionnel) : Dictionnaire pour stocker les comptes de chaque mot-clé.
-
-    Renvoie :
-        None : La fonction affiche le compte trié des mots-clés donnés.
-
-    Remarque : Cette fonction est conçue pour être utilisée de manière récursive.
-
-    Exemple :
-        count_words('python', ['java', 'python', 'javascript'])
+    Args:
+    - subreddit (str): the name of the subreddit to search in
+    - word_list (list): words to search for in the titles
+    - after (str): token to paginate through the subreddit's posts
+    - count (dict): store the count of each word in the titles
     """
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    if after != '':
+        url += '?after={}'.format(after)
+    user = {'User-Agent': 'CountIt'}
+    response = requests.get(url, headers=user, allow_redirects=False)
+    if response.status_code > 300:
+        return
+    data = response.json().get('data')
+    after = data.get('after')
+    check_titles(count, word_list, data.get('children'))
+    if after is None:
+        print_result(count)
+        return
+    count_words(subreddit, word_list, after, count)
 
-    # Si counts est None, initialisez-le comme un dictionnaire vide
-    if counts is None:
-        counts = {}
 
-    # Definir les en tetes pour la request HTTP
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/85.0.4183.102 Safari/537.36'}
+def print_result(count):
+    """
+    Prints the count of each key in the given dictionary in descending
+    order of count.
 
-    # Construire L'URL de la request HTTP
-    if after:
-        url = f'https://www.reddit.com/r/{subreddit}/hot.json?after={after}'
-    else:
-        url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+    Args:
+    - count (dict): words searched for and their respective counts
+    """
+    sorted_dict = dict(sorted(count.items(), key=lambda x: x[1], reverse=True))
+    for key, value in sorted_dict.items():
+        if value > 0:
+            print('{}: {}'.format(key, value))
 
-    # Faire la request HTTP
-    response = requests.get(url, headers=headers)
 
-    # Vérifier si la requete a reussi (code 200)
-    if response.status_code != 200:
-        return None
+def check_titles(count, word_list, posts):
+    """
+    Count the occurrences of words from a given list in the titles of a list
+    of Reddit posts.
 
-    # Analyser la réponse JSON
-    data = response.json()
-
-    # Extraire les titres des articles
-    posts = data['data']['children']
+    Args:
+    - count (dict): store the word counts
+    - word_list (list): words to search for
+    - posts (list): Reddit posts
+    """
     for post in posts:
-        title = post['data']['title'].lower()
-
-    # Vérifier la présence des mots dans les titres
-    for word in word_list:
-        if word.lower() in title:
-            counts[word] = counts.get(word, 0) + 1
-
-    # Verifer s'il une page suivante (pagination)
-    after = data['data']['after']
-
-    # Si une page suivante existe, appeler la fonction count_words
-    if after:
-        count_words(subreddit, word_list, after, counts)
-    else:
-        # Si une page suivante n'existe pas, imprimer les résultats
-        print_results(counts)
-
-
-
-def print_results(counts):
-    """
-    Afficher le compte trié des mots-clés donnés.
-
-    Paramètres :
-        - counts (dict) : Dictionnaire contenant les comptes de chaque mot-clé.
-
-    Renvoie :
-        None : La fonction affiche le compte trié des mots-clés donnés.
-    """
-
-    sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
-    for word, count in sorted_counts:
-        print(f'{word}: {count}')
+        for word in post.get('data').get('title').lower().split():
+            if word in [keyword.lower() for keyword in word_list]:
+                if word not in count.keys():
+                    count[word] = 1
+                else:
+                    count[word] += 1
