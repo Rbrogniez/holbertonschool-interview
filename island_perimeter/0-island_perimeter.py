@@ -1,5 +1,22 @@
 #!/usr/bin/python3
 def island_perimeter(grid):
+    """
+    Calculates the perimeter of the island described in the given grid.
+
+    Parameters:
+    - grid : list[list[int]]
+        A list of lists of integers representing the grid of the island.
+        Each integer represents a cell:
+            - 0 represents water.
+            - 1 represents land.
+        The grid is completely surrounded by water.
+        There is only one island (or nothing).
+        The island doesn't have "lakes" (water inside that isn't connected to the water surrounding the island).
+
+    Returns:
+    - perimeter : int
+        The total perimeter of the island.
+    """
     perimeter = 0
 
     # Check each cell in the grid
