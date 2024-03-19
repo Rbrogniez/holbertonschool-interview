@@ -28,7 +28,7 @@ def island_perimeter(grid):
         for j in range(len(grid[0])):
             if grid[i][j] == 1:  # If the cell represents land
                 # Check each side of the cell
-                # If the side is water r outside the grid,add 1 to the perimeter
+                # If the side is water outside the grid,add 1 to the perimeter
                 if i == 0 or grid[i - 1][j] == 0:
                     perimeter += 1
                 if i == len(grid) - 1 or grid[i + 1][j] == 0:
